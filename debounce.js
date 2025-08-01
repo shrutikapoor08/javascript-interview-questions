@@ -25,8 +25,3 @@ for (let i = 0; i < 1000; i++) {
 }
 
 
-for (let i = 0; i < 200; i++) {
-  (function (i) {
-    debouncedLog(i);
-  })(i);
-}
