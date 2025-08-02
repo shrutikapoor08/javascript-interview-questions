@@ -7,30 +7,29 @@ class EventEmitter {
     this.events = {};
   }
 
-  // Subscribe to an event
-  on(eventName, listener) {
-    if (!this.events[eventName]) {
-      this.events[eventName] = [];
+  on(event, listener) {
+    if(this.events[event]) {
+      this.events[event].push(listener)
     }
-    this.events[eventName].push(listener);
+  else this.events[event] = [listener];
   }
 
-  // Emit an event with optional arguments
-  emit(eventName, ...args) {
-    const listeners = this.events[eventName];
-    if (listeners) {
-      this.events[eventName].forEach((listener) => listener(...args));
-    }
-  }
-
-  // Unsubscribe a specific listener
-  off(eventName, listenerToRemove) {
-    const listeners = this.events[eventName];
-    if (listeners) {
-      this.events[eventName] = listeners.filter(
-        (listener) => listener !== listenerToRemove
+  off(event, listener) {
+    const listeners = this.events[event];
+      if(listeners) {
+        this.events[event] = listeners.filter(
+        (l) => l !== listener
       );
     }
+  }
+
+  emit(event, ...args) {
+    const listeners = this.events[event];
+
+    if(listeners) {
+      listeners.forEach( listener => listener(...args));
+    }
+
   }
 }
 
