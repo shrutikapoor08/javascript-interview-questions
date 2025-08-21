@@ -1,9 +1,14 @@
 /*
+LRU Cache
+Stores a limited number of items.- capacity. 
+
+When it reaches capacity and a new item is added, it evicts the least recently used item.
+
+Accessing (reading/writing) an item makes it the most recently used.
+
 JavaScript Map
 O(1) read/write/delete by key
 Insertion order tracking — first inserted = least recently used
-
-
 */
 
 class LRUCache {
@@ -12,30 +17,33 @@ class LRUCache {
         this.cache = new Map();
     }
 
-    get(key){
+    put(key, value){
+        if(this.cache.size === this.capacity) {
+            // Evict the least recently used item (first key)
+            const firstKey = this.cache.keys().next().value;  
+            this.cache.delete(firstKey)    
+        }
+        
+        if(this.cache.has(key)){
+            this.cache.delete(key)
+        }
+
+        this.cache.set(key, value);
+    }
+
+    get(key) {
         if(!this.cache.has(key)) return -1;
 
+        // if the item exists, move it to the top.
+
         let value = this.cache.get(key);
-        this.cache.delete(key)
-        this.cache.set(key,value);
+        this.cache.delete(key);
+        this.cache.set(key, value)
 
         return value;
-
-    }
-    put(key, value) {
-        if(this.cache.size === this.capacity) {
-            let firstKey = this.cache.keys().next().value;
-            this.cache.delete(firstKey);
-
-        }
-
-        if(this.cache.has(key)) {
-                this.cache.delete(key)
-        }
-        this.cache.set(key,value)
-
     }
 }
+
 
 
 const LRU = new LRUCache(2);
