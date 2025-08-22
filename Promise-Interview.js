@@ -8,21 +8,21 @@ class MyPromise {
 
 
         const resolve = (val) => {
-            if(this.state !== 'pending') return;
+            if (this.state !== 'pending') return;
 
             this.state = 'fulfilled';
             this.value = val;
             this.thenCallbacks.forEach(cb => cb(val));
-           
+
 
         }
         const reject = (val) => {
-            if(this.state !== 'pending') return;
+            if (this.state !== 'pending') return;
 
             this.state = 'rejected';
             this.value = val;
             this.catchCallbacks.forEach(cb => cb(val));
-        
+
         }
 
         try {
@@ -33,20 +33,21 @@ class MyPromise {
     }
 
     then(thenCb, catchCb) {
-       if (this.state === 'pending') {
-        if (this.thenCb) this.thenCallbacks.push(thenCb);
-        if (this.catchCb) this.catchCallbacks.push(catchCb);
-       }
+        if (this.state === 'pending') {
+            if (thenCb) this.thenCallbacks.push(thenCb);
+            if (catchCb) this.catchCallbacks.push(catchCb);
+        }
         else if (this.state === 'fulfilled') {
             this.thenCallbacks.forEach(cb => { cb(this.value); });
-        } 
+        }
         else if (this.state === 'rejected') {
             this.catchCallbacks.forEach(cb => { cb(this.value); });
         }
-        
+        return this;
+
     }
 
-    catch() {
+    catch(catchCb) {
         return this.then(undefined, catchCb);
     }
 
@@ -55,40 +56,27 @@ class MyPromise {
     }
 }
 
-const myPromise = new MyPromise((resolve) => {
+const myPromise = new MyPromise((resolve, reject) => {
     // Do something
     console.log("MyPromise started");
-
+    const success = false;
     setTimeout(() => {
-        reject("MyPromise Success");
+        if (success) resolve("MyPromise Success");
+        else reject("MyPromise Failed");
     }, 2000);
 });
 
 myPromise
-  .then((result) => {
-    console.log(result);
-  })
-  .then(() => {
-    console.log("Second then");
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
-
-
-
-const promise = new Promise((resolve) => {
-    // Do something
-    console.log("Promise started");
-    setTimeout(() => {
-        resolve("Promise Success");
-    }, 2000);
-});
-
-promise
     .then((result) => {
         console.log(result);
     })
-    .then(() => {
-        console.log("Second then");
+    .then((result) => {
+        console.log("Second then", result);
     })
+    .catch((error) => {
+        console.error("Error:", error);
+    })
+    .then((result) => {
+        console.log("Third then after catch", result);
+    });
+
