@@ -32,19 +32,22 @@ class MyPromise {
         }
     }
 
-    then(thenCb) {
+    then(thenCb, catchCb) {
        if (this.state === 'pending') {
         if (this.thenCb) this.thenCallbacks.push(thenCb);
+        if (this.catchCb) this.catchCallbacks.push(catchCb);
        }
         else if (this.state === 'fulfilled') {
             this.thenCallbacks.forEach(cb => { cb(this.value); });
         } 
+        else if (this.state === 'rejected') {
+            this.catchCallbacks.forEach(cb => { cb(this.value); });
+        }
         
     }
 
     catch() {
-    
-
+        return this.then(undefined, catchCb);
     }
 
     finally() {
