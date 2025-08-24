@@ -107,8 +107,14 @@ class MyPromise {
         return this.then(undefined, catchCb);
     }
 
-    finally() {
-
+    finally(cb) {
+return this.then( result => {
+    cb();
+    return result;
+}, error => {  
+    cb();
+    throw error;
+});
     }
 }
 
