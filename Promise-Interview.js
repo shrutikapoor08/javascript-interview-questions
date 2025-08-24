@@ -7,7 +7,7 @@ class MyPromise {
         this.catchCallbacks = [];
 
         const resolve = (result) => {
-            // the proimise is fulfilled,
+            // the promise is fulfilled,
             // call all the then callbacks
             // pass the result to the callbacks
             if (this.state !== 'pending') return;
@@ -54,7 +54,8 @@ class MyPromise {
         }
     }
 
-    catch() {
+    catch(catchCb) {
+        this.then(null, catchCb);
 
     }
     finally() {
@@ -66,7 +67,7 @@ class MyPromise {
 const myPromise = new MyPromise((resolve, reject) => {
     // Do something
     console.log("MyPromise started");
-    const success = true;
+    const success = false;
     setTimeout(() => {
         if (success) resolve("MyPromise Success");
         else reject("MyPromise Failed");
@@ -92,6 +93,9 @@ myPromise
     .then((result) => {
         console.log(result);
         return result + " - processed";
+    }, (error) => {
+        console.error("First then catch", error);
+        throw new Error("Error in first then");
     })
 // .then((result) => {
 //     console.log("Second then", result);
