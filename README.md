@@ -21,3 +21,12 @@
 1. [Priority Queue](PriorityQueue.js)
 1. [HashTable](HashTable.js)
 1. [Graphs](Graphs.js)
+
+
+### TO-DO
+1. Promises.all
+2. Deep clone object
+3. currying
+4. json.stringify
+5. getElementsByStyle
+6. return previous left sibling
